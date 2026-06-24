@@ -359,7 +359,7 @@ with st.sidebar:
     st.markdown("## 📊 Beat Optimisation")
     st.markdown("**NCR West Pilot | GCPL GT**")
     st.markdown("---")
-    uploaded = st.file_uploader("Upload Input CSV/XLSX", type=["csv","xlsx"])
+    # uploaded = st.file_uploader("Upload Input CSV/XLSX", type=["csv","xlsx"])
     st.markdown("---")
     st.markdown("**Productivity Threshold**")
     prod_th_ui = st.number_input("GSV > Rs", value=250, step=50)
@@ -371,15 +371,22 @@ with st.sidebar:
                          "🗺️ M3: Route","📈 Backtesting"])
 
 # ── Load data ────────────────────────────────────────────────
-if uploaded:
-    if "df" not in st.session_state or st.session_state.get("fname")!=uploaded.name:
-        with st.spinner("Loading data..."):
-            df = load_and_engineer(uploaded)
-            st.session_state["df"] = df
-            st.session_state["fname"] = uploaded.name
-else:
-    st.warning("⬅️  Please upload the input CSV/XLSX file to begin.")
-    st.stop()
+# if uploaded:
+#     if "df" not in st.session_state or st.session_state.get("fname")!=uploaded.name:
+#         with st.spinner("Loading data..."):
+#             df = load_and_engineer(uploaded)
+#             st.session_state["df"] = df
+#             st.session_state["fname"] = uploaded.name
+# else:
+#     st.warning("⬅️  Please upload the input CSV/XLSX file to begin.")
+#     st.stop()
+
+DATA_PATH = "input_ncr_west_active_outlets.csv"
+
+if "df" not in st.session_state:
+    with st.spinner("Loading data — please wait..."):
+        df = load_and_engineer(DATA_PATH)
+        st.session_state["df"] = df
 
 df = st.session_state["df"]
 sched = df[df["Was_Scheduled"]==1].copy()
